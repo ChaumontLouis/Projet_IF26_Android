@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/app_bar_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="ifRoom" />
+
+
+    <item android:id="@+id/action_settings"
+        android:title="@string/action_settings"
+        android:orderInCategory="100"
+        app:showAsAction="never" ></item>
+
+    <item
+        android:id="@+id/Trie"
+        android:icon="@drawable/baseline_sort_white"
+        android:title="MenuTrie"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/action_title"
+                android:orderInCategory="100"
+                android:title="@string/menu_bytitle"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_hearts"
+                android:orderInCategory="100"
+                android:title="@string/menu_byhearts"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_date"
+                android:orderInCategory="100"
+                android:title="@string/menu_bydate"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+</menu>

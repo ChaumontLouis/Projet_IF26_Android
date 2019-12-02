@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Spinner
+        android:id="@+id/spinner_color_mode"
+        android:layout_width="100dp"
+        android:layout_height="51dp"
+        android:dropDownWidth="wrap_content"
+        android:entries="@array/color_mode_array"
+        android:scrollbarSize="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/affichage_couleur" />
+
+    <View
+        android:id="@+id/affichage_couleur"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="#00AA2424"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editText_color_value"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/spinner_color_mode"
+        app:layout_constraintTop_toBottomOf="@+id/affichage_couleur" />
+
+</android.support.constraint.ConstraintLayout>

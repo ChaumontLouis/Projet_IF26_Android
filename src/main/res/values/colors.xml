@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorMenu_Background">#009585</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="background_rose_menu">#F04770</color>
+
+    <color name="bleu_facebook">#41679C</color>
+    <color name="vert_log_in_plus_fonce">#00796A</color>
+
+
+</resources>
