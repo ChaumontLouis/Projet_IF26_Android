@@ -1,32 +1,56 @@
 package com.example.test_menu;
 
 import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Toast;
 
-import com.example.test_menu.ui.login.LoginActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
+
+import static com.example.test_menu.PaletteRoomDataBase.databaseWriteExecutor;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public static final int NEW_PALETTE_ACTIVITY_REQUEST_CODE = 1;
+    private PaletteViewModel mPaletteViewModel;
+    private PaletteRoomDataBase dataBase;
+    private PaletteListAdapter adapter;
+    private PaletteDAO dao;
+    private UserRoomDataBase userRoomDataBase;
+    private UserDAO userDAO;
+    private String userlogged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        userlogged = UserLogged.UserLooged;
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.button_add_palette);
@@ -34,7 +58,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), Ajout_palette.class);
-                startActivityForResult(intent,2);
+                startActivityForResult(intent,NEW_PALETTE_ACTIVITY_REQUEST_CODE);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -44,6 +68,41 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        adapter = new PaletteListAdapter(this);
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mPaletteViewModel = new ViewModelProvider(this).get(PaletteViewModel.class);
+
+        mPaletteViewModel.getUserPalette().observe(this, new Observer<List<Palette>>() {
+            @Override
+            public void onChanged(@Nullable final List<Palette> palettes) {
+                adapter.setPalettes(palettes);
+            }
+        });
+
+        userRoomDataBase = UserRoomDataBase.getDatabase(this);
+        userDAO = userRoomDataBase.UserDAO();
+
+
+        //Button log_out = (Button) findViewById(R.id.nav_log_out);
+      /*  log_out.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Users[] users = userDAO.getAlphabetizedUsers();
+                System.out.println(users.length);
+                for (Users listUser : users) {
+                    System.out.println("/\\/\\/\\/\\" + listUser.toString() + "/\\/\\/\\/\\");
+                }
+
+                Intent intent = new Intent(getApplicationContext(),login_activity.class);
+                startActivity(intent);
+            }
+        });*/
+
     }
 
     @Override
@@ -84,10 +143,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_mypalettes) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
+            mPaletteViewModel.getByDate();
         } else if (id == R.id.nav_publicpalettes) {
-
+            mPaletteViewModel.getByHeart();
         } else if (id == R.id.nav_favorites) {
 
         } else if (id == R.id.nav_cardpalettes) {
@@ -99,6 +157,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_log_out) {
 
+        } else if (id == R.id.action_hearts) {
+
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -108,11 +168,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 2) {
-            if(resultCode == Activity.RESULT_OK){
+        super.onActivityResult(requestCode,resultCode,data);
+
+        if (requestCode == NEW_PALETTE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
                 Bundle bundle = data.getExtras();
                 String name = bundle.getString("title");
                 String tags = bundle.getString("tags");
+                String date = bundle.getString("date");
                 Boolean isPrivate = bundle.getBoolean("private");
                 String color1 = bundle.getString("color1");
                 String color2 = bundle.getString("color2");
@@ -120,11 +182,15 @@ public class MainActivity extends AppCompatActivity
                 String color4 = bundle.getString("color4");
                 String color5 = bundle.getString("color5");
 
-                //  Ajouter tous ca dans la base de données des palettes
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
+                Palette newPalette = new Palette(this.userlogged,color1,color2,color3,color4,color5,name,tags,date,isPrivate);
+                mPaletteViewModel.insert(newPalette);
 
-            }
+        } else {
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Enregistrement échoué",
+                    Toast.LENGTH_LONG).show();
         }
     }
+
 }

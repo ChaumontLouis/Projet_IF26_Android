@@ -34,13 +34,17 @@ public class couleurAdapter extends ArrayAdapter<couleur> {
             viewHolder = new couleurViewHolder();
             viewHolder.affichage_couleur = (View) convertView.findViewById(R.id.affichage_couleur);
            // viewHolder.choix_color_mode = (Spinner) convertView.findViewById(R.id.spinner_color_mode);
-            viewHolder.color_value = (EditText) convertView.findViewById(R.id.editText_color_value);
+            viewHolder.color_value_hex = (EditText) convertView.findViewById(R.id.editText_color_value);
+            viewHolder.color_value_rgb = (EditText) convertView.findViewById(R.id.editText_color_value_rgb);
+            viewHolder.color_value_hsv = (EditText) convertView.findViewById(R.id.editText_color_value_hsv);
             convertView.setTag(viewHolder);
         }
 
         final couleur color = getItem(position);
         viewHolder.affichage_couleur.setBackgroundColor(Color.parseColor("#"+color.getHex_value()));
-        viewHolder.color_value.setText(color.getHex_value());
+        viewHolder.color_value_hex.setText(color.getHex_value());
+        viewHolder.color_value_rgb.setText(color.getRgbString());
+        viewHolder.color_value_hsv.setText(color.getHSV());
        // viewHolder.choix_color_mode.setAdapter();
 
 
@@ -55,6 +59,9 @@ public class couleurAdapter extends ArrayAdapter<couleur> {
                 } else if (s.length() == 6){
                     color.setHex_value(s.toString());
                     finalViewHolder.affichage_couleur.setBackgroundColor(Color.parseColor("#"+color.getHex_value()));
+                    finalViewHolder.color_value_rgb.setText(color.getRgbString());
+                    finalViewHolder.color_value_hsv.setText(color.getHSV());
+
                 }
             }
             @Override
@@ -70,9 +77,9 @@ public class couleurAdapter extends ArrayAdapter<couleur> {
         };
 
         viewHolder.affichage_couleur.setOnClickListener(clickListener);
-        viewHolder.affichage_couleur.setTag(clickListener);
-        viewHolder.color_value.addTextChangedListener(watcher);
-        viewHolder.color_value.setTag(watcher);
+      //  viewHolder.affichage_couleur.setTag(clickListener);
+        viewHolder.color_value_hex.addTextChangedListener(watcher);
+       // viewHolder.color_value_hex.setTag(watcher);
 
         return convertView;
     }
@@ -80,7 +87,9 @@ public class couleurAdapter extends ArrayAdapter<couleur> {
     private class couleurViewHolder{
         private View affichage_couleur;
         //private Spinner choix_color_mode;
-        private EditText color_value;
+        private EditText color_value_hex;
+        private EditText color_value_rgb;
+        private EditText color_value_hsv;
     }
 
     public void openColorPicker(View v, final couleurViewHolder viewHolder) {
@@ -95,7 +104,7 @@ public class couleurAdapter extends ArrayAdapter<couleur> {
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
                 String fullColorCode = String.format("0x%08x",color);
-                viewHolder.color_value.setText(fullColorCode.substring(4));
+                viewHolder.color_value_hex.setText(fullColorCode.substring(4));
             }
         });
         colorPicker.show();
