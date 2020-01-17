@@ -1,7 +1,10 @@
 package com.example.test_menu;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +77,6 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
             holder.isPrivate.setChecked(current.isIsprivate());
 
         } else {
-
             holder.tv_name.setText("Not ready");
             holder.tv_tags.setText("Not ready");
             holder.tv_date.setText("Not ready");
@@ -92,6 +94,38 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
             public void onClick(View v) {
                 PaletteDAO dao = PaletteRoomDataBase.getDatabase(v.getContext()).paletteDAO();
                 dao.deleteByName(holder.tv_name.getText().toString());
+            }
+        });
+
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Context context = v.getContext();
+                Intent intent = new Intent(context,EditPalette.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putString("paletteName",holder.tv_name.getText().toString());
+                bundle.putString("tags", holder.tv_tags.getText().toString());
+                bundle.putBoolean("isPrivate", holder.isPrivate.isChecked());
+
+                ColorDrawable col1 = (ColorDrawable) holder.couleur1.getBackground();
+                String hexColor1 = String.format("#%06X", (0xFFFFFF & col1.getColor()));
+                ColorDrawable col2 = (ColorDrawable) holder.couleur2.getBackground();
+                String hexColor2 = String.format("#%06X", (0xFFFFFF & col2.getColor()));
+                ColorDrawable col3 = (ColorDrawable) holder.couleur3.getBackground();
+                String hexColor3 = String.format("#%06X", (0xFFFFFF & col3.getColor()));
+                ColorDrawable col4 = (ColorDrawable) holder.couleur4.getBackground();
+                String hexColor4 = String.format("#%06X", (0xFFFFFF & col4.getColor()));
+                ColorDrawable col5 = (ColorDrawable) holder.couleur5.getBackground();
+                String hexColor5 = String.format("#%06X", (0xFFFFFF & col5.getColor()));
+                bundle.putString("color1",hexColor1);
+                bundle.putString("color2",hexColor2);
+                bundle.putString("color3",hexColor3);
+                bundle.putString("color4",hexColor4);
+                bundle.putString("color5",hexColor5);
+
+                intent.putExtras(bundle);
+                context.startActivity(intent);
             }
         });
     }

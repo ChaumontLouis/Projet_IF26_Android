@@ -29,7 +29,7 @@ public abstract class PaletteRoomDataBase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), PaletteRoomDataBase.class, "palette_database")
                             .allowMainThreadQueries()
                             //.addCallback(resetDataBase)
-                            .addCallback(populateWithSamplePalette)
+                            //.addCallback(populateWithSamplePalette)
                             .build();
                 }
             }
