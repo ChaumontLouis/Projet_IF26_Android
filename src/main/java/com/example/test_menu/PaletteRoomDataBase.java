@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Palette.class, Users.class}, version = 4, exportSchema = false)
+@Database(entities = {Palette.class, Users.class}, version = 1, exportSchema = false)
 public abstract class PaletteRoomDataBase extends RoomDatabase {
 
     public abstract PaletteDAO paletteDAO();
@@ -27,8 +27,9 @@ public abstract class PaletteRoomDataBase extends RoomDatabase {
             synchronized (PaletteRoomDataBase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), PaletteRoomDataBase.class, "palette_database")
-                            //.addCallback(sRoomDatabaseCallback)
-                            .addMigrations(MIGRATION_2_3)
+                            .allowMainThreadQueries()
+                            //.addCallback(resetDataBase)
+                            .addCallback(populateWithSamplePalette)
                             .build();
                 }
             }
@@ -36,24 +37,32 @@ public abstract class PaletteRoomDataBase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+    private static RoomDatabase.Callback resetDataBase = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-
             databaseWriteExecutor.execute(() -> {
-
                 PaletteDAO dao = INSTANCE.paletteDAO();
                 dao.deleteAll();
-
             });
         }
     };
 
-    static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+    private static RoomDatabase.Callback populateWithSamplePalette = new RoomDatabase.Callback() {
         @Override
-        public void migrate(SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE IF NOT EXISTS 'palette_database' ('user' TEXT,'couleur1' TEXT, 'couleur2' TEXT,'couleur3' TEXT,'couleur4' TEXT,'couleur5' TEXT, 'name' TEXT, 'heartCount' INTEGER, 'data' TEXT, 'tags', TEXT, PRIMARY KEY('name'))");
+        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            super.onOpen(db);
+            databaseWriteExecutor.execute(() -> {
+                INSTANCE.paletteDAO().deleteAll();
+                Palette p1 = new Palette("oui","FF00FF","FF0000","00FF00","0000FF","FFFF00","AA","J'aimelesTags1","DD",8,false);
+                Palette p2 = new Palette("oui","FFFFFF","0000FF","00FF00","0000FF","00FF00","CC","J'aimelesTags2","BB",1,true);
+                Palette p3 = new Palette("oui","FF00FF","FF0000","0FB500","0000FF","FA2F05","BB","J'aimelesTags3","AA",4,true);
+                Palette p4 = new Palette("oui","FF00FF","FAB954","FFF450","7860BF","AFBF2F","DD","J'aimelesTags4","CC",10,false);
+                INSTANCE.paletteDAO().insert(p1);
+                INSTANCE.paletteDAO().insert(p2);
+                INSTANCE.paletteDAO().insert(p3);
+                INSTANCE.paletteDAO().insert(p4);
+            });
         }
     };
 }

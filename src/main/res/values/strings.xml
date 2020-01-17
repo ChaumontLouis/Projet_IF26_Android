@@ -48,6 +48,7 @@
     <string name="login_mdp">Password</string>
     <string name="repeat_login_mdp">Repeat Password</string>
     <string name="cancel_sign_Up">Already have an account ?</string>
+    <string name="validata_signUp">Create Account</string>
 
     <string-array name="color_mode_array">
         <item>HEX</item>

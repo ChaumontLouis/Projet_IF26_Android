@@ -87,7 +87,7 @@
         android:background="@color/vert_log_in_plus_fonce"
         android:clickable="true"
         android:enabled="true"
-        android:text="@string/action_sign_in"
+        android:text="@string/validata_signUp"
         android:textColor="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

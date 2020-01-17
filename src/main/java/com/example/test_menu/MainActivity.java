@@ -88,20 +88,18 @@ public class MainActivity extends AppCompatActivity
         userDAO = userRoomDataBase.UserDAO();
 
 
-        //Button log_out = (Button) findViewById(R.id.nav_log_out);
-      /*  log_out.setOnClickListener(new View.OnClickListener() {
+        Button log_out = (Button) findViewById(R.id.button3);
+        log_out.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Users[] users = userDAO.getAlphabetizedUsers();
-                System.out.println(users.length);
-                for (Users listUser : users) {
-                    System.out.println("/\\/\\/\\/\\" + listUser.toString() + "/\\/\\/\\/\\");
-                }
-
-                Intent intent = new Intent(getApplicationContext(),login_activity.class);
-                startActivity(intent);
+                mPaletteViewModel.getByDate();
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+                adapter.notifyDataSetChanged();
             }
-        });*/
+        });
 
     }
 
@@ -156,7 +154,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, Settings_activity.class);
             startActivity(intent);
         } else if (id == R.id.nav_log_out) {
-
+            finish();
         } else if (id == R.id.action_hearts) {
 
         }

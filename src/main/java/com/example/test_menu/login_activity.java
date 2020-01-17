@@ -46,6 +46,7 @@ public class login_activity extends AppCompatActivity {
                 Users[] users;
                 users = userDAO.getAlphabetizedUsers();
                 for (Users users1 : users) {
+                    System.out.println("Tentative d'identification : "+users1.getName()+" / "+userName.getText().toString() + " ///// " +users1.getMdp() + " / "+userMdp.getText().toString());
                     if (users1.getName().equals(userName.getText().toString()) && users1.getMdp().equals(userMdp.getText().toString())) {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         UserLogged.UserLooged = users1.getName();

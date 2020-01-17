@@ -5,11 +5,9 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,8 +26,7 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
         private final View couleur4;
         private final View couleur5;
         private final Switch isPrivate;
-        private final Button share;
-        private final Button copy;
+        private final Button view;
         private final Button edit;
         private final Button delete;
 
@@ -45,8 +42,7 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
             couleur4 = itemView.findViewById(R.id.list_palette_color4);
             couleur5 = itemView.findViewById(R.id.list_palette_color5);
             isPrivate = itemView.findViewById(R.id.isPrivate_liste_palette);
-            share = itemView.findViewById(R.id.share_list_palette);
-            copy = itemView.findViewById(R.id.copy_list_palette);
+            view = itemView.findViewById(R.id.view_list_palette);
             edit = itemView.findViewById(R.id.edit_list_palette);
             delete = itemView.findViewById(R.id.delette_list_palette);
         }
@@ -94,7 +90,8 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                PaletteDAO dao = PaletteRoomDataBase.getDatabase(v.getContext()).paletteDAO();
+                dao.deleteByName(holder.tv_name.getText().toString());
             }
         });
     }

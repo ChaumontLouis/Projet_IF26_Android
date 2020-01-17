@@ -43,12 +43,12 @@ public class PaletteRepository {
     }
 
     LiveData<List<Palette>> sortByDate() {
-        mAllPalettes = mPaletteDao.getByDatePalette();
+        mAllPalettes = mPaletteDao.getByDatePalette(UserLogged.UserLooged);
         return mAllPalettes;
     }
 
     LiveData<List<Palette>> sortByHeart() {
-        mAllPalettes = mPaletteDao.getByHeartCountPalette();
+        mAllPalettes = mPaletteDao.getByHeartCountPalette(UserLogged.UserLooged);
         return mAllPalettes;
     }
 }
