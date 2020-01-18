@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,6 +47,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         userlogged = UserLogged.UserLooged;
+
+        dataBase = PaletteRoomDataBase.getDatabase(getApplicationContext());
+        dao = dataBase.paletteDAO();
 
         LayoutInflater inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.nav_header_main,null);
@@ -123,7 +127,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_mypalettes) {
             mPaletteViewModel.getByDate();
         } else if (id == R.id.nav_publicpalettes) {
-            mPaletteViewModel.getByHeart();
+            Intent intent = new Intent(this,PublicPalette.class);
+            startActivity(intent);
         } else if (id == R.id.nav_favorites) {
 
         } else if (id == R.id.nav_cardpalettes) {

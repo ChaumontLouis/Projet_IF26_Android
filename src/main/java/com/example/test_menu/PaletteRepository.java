@@ -47,6 +47,11 @@ public class PaletteRepository {
         return mAllPalettes;
     }
 
+    LiveData<List<Palette>> getPublic() {
+        mAllPalettes = mPaletteDao.getAllPublic(false);
+        return mAllPalettes;
+    }
+
     LiveData<List<Palette>> sortByHeart() {
         mAllPalettes = mPaletteDao.getByHeartCountPalette(UserLogged.UserLooged);
         return mAllPalettes;

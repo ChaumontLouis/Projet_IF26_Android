@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.PaletteViewHolder> {
+public class PublicListAdapter extends RecyclerView.Adapter<PublicListAdapter.PublicViewHolder> {
 
-    class PaletteViewHolder extends RecyclerView.ViewHolder {
+    class PublicViewHolder extends RecyclerView.ViewHolder {
         private final TextView tv_name;
         private final TextView tv_tags;
         private final TextView tv_date;
@@ -33,7 +33,7 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
         private final Button edit;
         private final Button delete;
 
-        private PaletteViewHolder(View itemView) {
+        private PublicViewHolder(View itemView) {
             super(itemView);
             tv_name = itemView.findViewById(R.id.nom_palette_item);
             tv_tags = itemView.findViewById(R.id.liste_palette_tags);
@@ -54,14 +54,14 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
     private final LayoutInflater mInflater;
     private List<Palette> mPalettes;
 
-    PaletteListAdapter(Context context) { mInflater = LayoutInflater.from(context);}
+    PublicListAdapter(Context context) { mInflater = LayoutInflater.from(context);}
 
-    public PaletteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PublicViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.list_palette_item_view, parent, false);
-        return new PaletteViewHolder(itemView);
+        return new PublicViewHolder(itemView);
     }
 
-    public void onBindViewHolder(PaletteViewHolder holder, int position) {
+    public void onBindViewHolder(PublicViewHolder holder, int position) {
         if (mPalettes != null) {
             Palette current = mPalettes.get(position);
 
@@ -75,6 +75,11 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
             holder.couleur4.setBackgroundColor(Color.parseColor("#"+current.getColor_value4()));
             holder.couleur5.setBackgroundColor(Color.parseColor("#"+current.getColor_value5()));
             holder.isPrivate.setChecked(current.isIsprivate());
+
+            holder.edit.setVisibility(View.GONE);
+            holder.edit.setClickable(false);
+            holder.delete.setVisibility(View.GONE);
+            holder.delete.setClickable(false);
 
         } else {
             holder.tv_name.setText("Not ready");
@@ -121,46 +126,6 @@ public class PaletteListAdapter extends RecyclerView.Adapter<PaletteListAdapter.
 
                 intent.putExtras(bundle);
 
-                context.startActivity(intent);
-            }
-        });
-
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PaletteDAO dao = PaletteRoomDataBase.getDatabase(v.getContext()).paletteDAO();
-                dao.deleteByName(holder.tv_name.getText().toString());
-            }
-        });
-
-        holder.edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Context context = v.getContext();
-                Intent intent = new Intent(context,EditPalette.class);
-                Bundle bundle = new Bundle();
-
-                bundle.putString("paletteName",holder.tv_name.getText().toString());
-                bundle.putString("tags", holder.tv_tags.getText().toString());
-                bundle.putBoolean("isPrivate", holder.isPrivate.isChecked());
-
-                ColorDrawable col1 = (ColorDrawable) holder.couleur1.getBackground();
-                String hexColor1 = String.format("#%06X", (0xFFFFFF & col1.getColor()));
-                ColorDrawable col2 = (ColorDrawable) holder.couleur2.getBackground();
-                String hexColor2 = String.format("#%06X", (0xFFFFFF & col2.getColor()));
-                ColorDrawable col3 = (ColorDrawable) holder.couleur3.getBackground();
-                String hexColor3 = String.format("#%06X", (0xFFFFFF & col3.getColor()));
-                ColorDrawable col4 = (ColorDrawable) holder.couleur4.getBackground();
-                String hexColor4 = String.format("#%06X", (0xFFFFFF & col4.getColor()));
-                ColorDrawable col5 = (ColorDrawable) holder.couleur5.getBackground();
-                String hexColor5 = String.format("#%06X", (0xFFFFFF & col5.getColor()));
-                bundle.putString("color1",hexColor1);
-                bundle.putString("color2",hexColor2);
-                bundle.putString("color3",hexColor3);
-                bundle.putString("color4",hexColor4);
-                bundle.putString("color5",hexColor5);
-
-                intent.putExtras(bundle);
                 context.startActivity(intent);
             }
         });

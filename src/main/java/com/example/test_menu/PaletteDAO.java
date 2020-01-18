@@ -27,6 +27,9 @@ public interface PaletteDAO {
     @Query("SELECT * from palette_table WHERE user = :user ORDER BY Date_de_création ASC")
     LiveData<List<Palette>> getByDatePalette(String user);
 
+    @Query("SELECT * from palette_table WHERE Isprivate= :bool ORDER BY name ASC")
+    LiveData<List<Palette>> getAllPublic(Boolean bool);
+
     @Query("SELECT * from palette_table WHERE user = :user ORDER BY Nombre_de_like ASC")
     LiveData<List<Palette>> getByHeartCountPalette(String user);
 

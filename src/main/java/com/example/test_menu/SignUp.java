@@ -17,11 +17,18 @@ public class SignUp extends AppCompatActivity {
     EditText repeatPassword;
     Button validate;
     Button cancelSignUp;
+    UserRoomDataBase dataBase;
+    UserDAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+
+        dataBase = UserRoomDataBase.getDatabase(getApplicationContext());
+        dao = dataBase.UserDAO();
+        Users[] users = dao.getAlphabetizedUsers();
+
 
         username = findViewById(R.id.signUp_userName);
         password = findViewById(R.id.signUp_password);
@@ -33,14 +40,28 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (repeatPassword.getText().toString().equals(password.getText().toString())) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString("username", username.getText().toString());
-                    bundle.putString("password", password.getText().toString());
+                    Boolean notInBase = true;
+                    for (Users user : users) {
+                        System.out.println("/////" + user.getName()+"///////");
+                        if (username.getText().toString().equals(user.getName())) {
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "Un compte avec ce même nom d'utilisateur existe dèja.",
+                                    Toast.LENGTH_LONG).show();
+                            notInBase = false;
+                        }
+                    }
 
-                    Intent intent = new Intent();
-                    intent.putExtras(bundle);
-                    setResult(Activity.RESULT_OK, intent);
-                    finish();
+                    if (notInBase == true) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("username", username.getText().toString());
+                        bundle.putString("password", password.getText().toString());
+
+                        Intent intent = new Intent();
+                        intent.putExtras(bundle);
+                        setResult(Activity.RESULT_OK, intent);
+                        finish();
+                    }
                 } else {
                     Toast.makeText(
                             getApplicationContext(),

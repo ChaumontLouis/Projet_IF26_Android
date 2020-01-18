@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/ViewPalette_name"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="false"
+        android:editable="false"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:longClickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/ViewPalette_tags"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="false"
+        android:editable="false"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:longClickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ViewPalette_name" />
+
+    <TextView
+        android:id="@+id/ViewPalette_date"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:clickable="false"
+        android:editable="false"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:longClickable="false"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ViewPalette_tags" />
+
+    <TextView
+        android:id="@+id/ViewPalette_heart"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginEnd="16dp"
+        android:clickable="false"
+        android:editable="false"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:longClickable="false"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/ViewPalette_isPrivate"
+        app:layout_constraintStart_toEndOf="@+id/ViewPalette_date"
+        app:layout_constraintTop_toBottomOf="@+id/ViewPalette_tags" />
+
+    <Switch
+        android:id="@+id/ViewPalette_isPrivate"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="16dp"
+        android:checked="false"
+        android:clickable="false"
+        android:editable="false"
+        android:text="@string/ajout_palette_private"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ViewPalette_tags" />
+
+    <ListView
+        android:id="@+id/ViewPalette_listView"
+        android:layout_width="368dp"
+        android:layout_height="485dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:clickable="false"
+        android:longClickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ViewPalette_date" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:layout_constraintEnd_toStartOf="@+id/ViewPalette_heart"
+        app:layout_constraintTop_toBottomOf="@+id/ViewPalette_tags"
+        app:srcCompat="@drawable/heart" />
+</androidx.constraintlayout.widget.ConstraintLayout>

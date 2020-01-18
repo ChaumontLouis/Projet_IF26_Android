@@ -23,6 +23,10 @@ public class PaletteViewModel extends AndroidViewModel {
     void getByName() { mAllPalette = mRepository.sortByName(); }
     void getByDate() { mAllPalette = mRepository.sortByDate(); }
     void getByHeart() { mAllPalette = mRepository.sortByHeart(); }
+    LiveData<List<Palette>> getPublic() {
+        mAllPalette = mRepository.getPublic();
+        return mRepository.getPublic();
+    }
 
     public void insert(Palette palette) { mRepository.insert(palette); }
     public void deleteItem(String palette_name) { mRepository.deleteItem(palette_name); }
