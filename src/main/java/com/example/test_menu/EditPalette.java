@@ -69,7 +69,6 @@ public class EditPalette extends AppCompatActivity {
                     couleurs.get(i).setHex_value(genererCouleur());
                     adapter.notifyDataSetChanged();
                 }
-
             }
         });
 
@@ -102,7 +101,6 @@ public class EditPalette extends AppCompatActivity {
         Random rng = new Random();
         int rand_num = rng.nextInt(0xffffff + 1);
         String colorCode = String.format("%06x", rand_num);
-        System.out.println("///////////////////////////////////////////////////////////////"+colorCode);
         return colorCode;
     }
 }
